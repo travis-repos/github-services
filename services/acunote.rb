@@ -1,20 +1,14 @@
-service :acunote do |data, payload|
-  token = data['token']
-  path = "/source_control/github/#{token}"
+class Service::Acunote < Service
+  def receive_push
+    # :(
+    http.ssl[:verify] = false
 
-  req = Net::HTTP::Post.new(path)
-  req.set_form_data('payload' => payload.to_json)
-  req["Content-Type"] = 'application/x-www-form-urlencoded'
+    res = http_post "https://www.acunote.com/source_control/github/%s" %
+      [ data['token'] ],
+      {'payload' => payload.to_json}
 
-  http = Net::HTTP.new("www.acunote.com", 443)
-  http.use_ssl = true
-  http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-  begin
-    http.start do |connection|
-      connection.request(req)
+    if res.status != 200
+      raise_config_error
     end
-  rescue Net::HTTPBadResponse
-    raise GitHub::ServiceConfigurationError, "Invalid configuration"
   end
-  nil
 end
