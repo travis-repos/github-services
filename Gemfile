@@ -19,4 +19,5 @@ gem "thin",          "1.2.2"
 
 group :test do
   gem "rake"
+  gem "rspec"
 end
