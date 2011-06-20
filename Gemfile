@@ -16,3 +16,7 @@ gem "xmpp4r-simple", "0.8.4"
 #gem "yammer4r",      "0.1.5"
 gem "ruby-hmac",     "0.4.0"
 gem "thin",          "1.2.2"
+
+group :test do
+  gem "rake"
+end
